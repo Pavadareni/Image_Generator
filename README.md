@@ -7,7 +7,7 @@ Step-by-step method to use the API:
    Ensure you have Python installed on your system. Install the required dependencies by running the following commands:
 
    ```bash
-   pip install fastapi uvicorn pillow diffusers
+   pip install streamlit torch diffusers pillow
    ```
 
 2. Save the Code:
