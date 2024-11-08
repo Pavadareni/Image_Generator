@@ -28,3 +28,5 @@ Run the Streamlit App: Open a terminal, navigate to the project directory, and r
  ```bash
 streamlit run main.py
 ```
+
+![Screenshot 2024-11-08 211620](https://github.com/user-attachments/assets/130a0085-b173-41f2-9647-6d44a0de6b60)
