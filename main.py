@@ -30,6 +30,7 @@ def load_pipeline():
 pipe = load_pipeline()  # Load pipeline once and cache it
 
 # Function to generate an image based on the prompt
+@st.cache_data  # Cache the result of image generation based on prompt
 def generate_image(prompt):
     try:
         image = pipe(prompt).images[0]
@@ -48,7 +49,7 @@ prompt = st.text_input(
     "Enter a prompt:", value="A photo of an astronaut riding a horse on Mars"
 )
 
-# Cache the result of image generation based on the prompt (so it doesn't regenerate on each run)
+# Generate the image only when the button is clicked
 if st.button("Generate Image"):
     # Clean and hash the prompt to use as a unique filename
     cleaned_prompt = prompt.lower().strip()
