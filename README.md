@@ -19,7 +19,9 @@ To set up and run the project locally:
 2 **Install Dependencies**
 Ensure Python is installed on your system. Install the required dependencies:
  ```bash
-pip install streamlit torch diffusers pillow  
+pip install streamlit diffusers pillow
+pip install torch torchvision torchaudio
+
 ```
 3 **Running the App Locally**
 To run the Streamlit app locally:
