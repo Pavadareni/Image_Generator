@@ -1,42 +1,29 @@
-Abstract of the code:
-The provided code is a FastAPI application that serves an endpoint to generate and return images based on a given prompt using the Stable Diffusion model. It utilizes the `diffusers` library, which is a deep learning-based text-to-image generation framework. The application uses the FastAPI framework to handle HTTP requests and responses, and the PIL library to work with images.
+# Stable Diffusion Image Generator with Streamlit
 
-Step-by-step method to use the API:
+This project is a Streamlit app that uses the **Stable Diffusion** model to generate images from text prompts. The app allows users to input a custom prompt, generate an image based on that prompt, and download the generated image. Generated images are cached for efficiency, so repeated prompts load faster.
 
-1. Install Dependencies:
-   Ensure you have Python installed on your system. Install the required dependencies by running the following commands:
+## Features
+- **Text-to-Image Generation**: Uses Stable Diffusion to generate images based on a text prompt.
+- **Caching**: Images are cached in the `images` folder. Repeated prompts will load the cached images instead of generating them again.
+- **Download**: Users can download generated images in PNG format.
+- **CPU/GPU Support**: Automatically switches between CPU and GPU depending on availability.
 
+## Installation
+
+To set up and run the project locally:
+
+1. **Clone the Repository** (if applicable):
    ```bash
-   pip install streamlit torch diffusers pillow
-   ```
-
-2. Save the Code:
-   Copy the provided code and save it into a Python script, e.g., `main.py`.
-
-3. Run the API Server:
-   Open a terminal or command prompt, navigate to the directory containing the `main.py` script, and run the following command to start the FastAPI server:
-
-   ```bash
-   uvicorn main:app --reload
-   ```
-
-   This will start the server on `http://localhost:8000`.
-
-4. Access the API Documentation:
-   Open your web browser and go to `http://localhost:8000/docs`. This will open the Swagger UI, where you can explore the available endpoints, input parameters, and responses. Alternatively, you can use `http://localhost:8000/redoc` to access the ReDoc UI, which provides a more user-friendly interface.
-
-5. Use the API to Generate Images:
-   Now that the server is running, you can use the API to generate images based on prompts.
-
-   - To generate an image with the default prompt ("a photo of an astronaut riding a horse on mars"), you can simply access the `/image/` endpoint through your web browser or any HTTP client like `curl`.
-     Example URL: `http://localhost:8000/image/`
-
-   - To generate an image with a custom prompt, you can specify the `prompt` query parameter in the URL. The prompt should be URL-encoded. Replace `<your-custom-prompt>` with your desired prompt.
-     Example URL: `http://localhost:8000/image/?prompt=<your-custom-prompt>`
-
-6. Save and Reuse Generated Images:
-   The API is designed to save the generated images in the "images" folder. The images are saved with filenames based on the cleaned version of the prompt (stripping out special characters and converting to lowercase). If an image already exists for a specific prompt, the API will return the previously generated image without re-generating it. This ensures that you can retrieve and reuse previously generated images efficiently.
-
-Please note that the code assumes you have access to the `diffusers` library, specifically the Stable Diffusion model (`"stabilityai/stable-diffusion-2-1"`). If you encounter any issues with the dependencies or model, make sure they are correctly installed and accessible in your Python environment.
-
-Remember to modify the hostname and port if you run the server on a different address. Additionally, for a production environment, consider configuring the server accordingly and using appropriate security measures as needed.
+   git clone https://github.com/Pavadareni/Image_Generator.git
+   cd Image_Generator
+2 **Install Dependencies**
+Ensure Python is installed on your system. Install the required dependencies:
+ ```bash
+pip install streamlit torch diffusers pillow  
+```
+3 **Running the App Locally**
+To run the Streamlit app locally:
+Run the Streamlit App: Open a terminal, navigate to the project directory, and run:
+ ```bash
+streamlit run main.py
+```
