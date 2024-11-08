@@ -11,9 +11,8 @@ model_id = "stabilityai/stable-diffusion-2-1"
 folder_path = "images"
 os.makedirs(folder_path, exist_ok=True)
 
-
 # Load Stable Diffusion pipeline with a fallback to CPU if CUDA is unavailable
-@st.cache_resource
+@st.cache_resource  # Cache model to avoid reloading it for every request
 def load_pipeline():
     try:
         pipe = StableDiffusionPipeline.from_pretrained(
@@ -22,15 +21,13 @@ def load_pipeline():
         pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
         pipe = pipe.to("cuda")
     except Exception as e:
-        st.warning("CUDA is not available. Falling back to CPU.")
+        st.warning(f"CUDA is not available. Falling back to CPU. Error: {e}")
         pipe = StableDiffusionPipeline.from_pretrained(model_id)
         pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
         pipe = pipe.to("cpu")
     return pipe
 
-
-pipe = load_pipeline()
-
+pipe = load_pipeline()  # Load pipeline once and cache it
 
 # Function to generate an image based on the prompt
 def generate_image(prompt):
@@ -41,12 +38,9 @@ def generate_image(prompt):
         return None
     return image
 
-
 # Function to create a hash for each prompt for unique filenames
 def generate_image_filename(prompt):
-    hash_object = hashlib.md5(prompt.encode())
-    return hash_object.hexdigest()
-
+    return hashlib.md5(prompt.encode()).hexdigest()
 
 # Streamlit Interface
 st.title("Stable Diffusion Image Generator")
@@ -54,17 +48,19 @@ prompt = st.text_input(
     "Enter a prompt:", value="A photo of an astronaut riding a horse on Mars"
 )
 
+# Cache the result of image generation based on the prompt (so it doesn't regenerate on each run)
 if st.button("Generate Image"):
+    # Clean and hash the prompt to use as a unique filename
     cleaned_prompt = prompt.lower().strip()
     image_filename = generate_image_filename(cleaned_prompt)
     image_path = os.path.join(folder_path, f"{image_filename}.png")
 
-    # Check if image already exists
+    # Check if image already exists in cache
     if os.path.exists(image_path):
         st.write("Image loaded from cache.")
         image = Image.open(image_path)
     else:
-        # Generate new image
+        # Generate a new image and save it
         image = generate_image(prompt)
         if image:
             image.save(image_path, format="PNG")
@@ -72,7 +68,7 @@ if st.button("Generate Image"):
             st.error("Failed to generate image.")
             image = None
 
-    # Display image if it exists
+    # Display the generated image if it exists
     if image:
         st.image(
             image,
@@ -80,7 +76,7 @@ if st.button("Generate Image"):
             use_column_width=True,
         )
 
-        # Provide download button
+        # Provide a download button for the image
         image_bytes = BytesIO()
         image.save(image_bytes, format="PNG")
         st.download_button(
